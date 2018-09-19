@@ -1,1 +1,1 @@
-# SMPP2018
+A program for multiplying matrices and analyzing the indexes' order dependency of cache-memory
