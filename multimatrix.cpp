@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <ctime>
 #include <cstring>
-
+//TODO: delete matrix 
 using namespace std;
 
 #define FOR(var1, var2, var3, n, m, l) \
@@ -68,6 +68,13 @@ T ** get_matrix(uint64_t n, uint64_t m) {
     }
     return t;
 }
+template <typename T> 
+void delete_matrix(T ** M, uint64_t rows) {
+    for (int i = 0; i < rows; i++) {
+        delete[] M[i];
+    }
+    delete[] M;
+}
 uint64_t get_time(char * a, char * b, char * c, char * order) {
     fstream a_f, b_f;
     a_f.open(a, ios::binary | ios::in);
@@ -92,12 +99,17 @@ uint64_t get_time(char * a, char * b, char * c, char * order) {
             read_matrix<float>(B, N_b, M_b, b_f);
             float ** C = get_matrix<float>(N_a, M_b);
             time_mul = multiply('f', N_a, M_b, N_b, A, B, C, order, c_f);
+            delete_matrix<float>(B, N_b);
+            delete_matrix<float>(C, N_a);
         } else {
             double ** B = get_matrix<double>(N_b, M_b);
             read_matrix<double>(B, N_a, M_a, b_f);
             double ** C = get_matrix<double>(N_a, M_b);
             time_mul = multiply('d', N_a, M_b, N_b, A, B, C, order, c_f);
+            delete_matrix<double>(B, N_b);
+            delete_matrix<double>(C, N_a);
         }
+        delete_matrix<float>(A, N_a);
     } else {
         double ** A = get_matrix<double>(N_a, M_a);
         read_matrix<double>(A, N_a, M_a, a_f); 
@@ -106,12 +118,17 @@ uint64_t get_time(char * a, char * b, char * c, char * order) {
             read_matrix<float>(B, N_b, M_b, b_f);
             double ** C = get_matrix<double>(N_a, M_b);
             time_mul = multiply('d', N_a, M_b, N_b, A, B, C, order, c_f);
+            delete_matrix<float>(B, N_b);
+            delete_matrix<double>(C, N_a);
         } else {
             double ** B = get_matrix<double>(N_b, M_b);
             read_matrix<double>(B, N_a, M_a, b_f);
             double ** C = get_matrix<double>(N_a, M_b);
             time_mul = multiply('d', N_a, M_b, N_b, A, B, C, order, c_f);
+            delete_matrix<double>(B, N_b);
+            delete_matrix<double>(C, N_a);
         }
+        delete_matrix<double>(A, N_a);
     }    
     return time_mul;
 }
