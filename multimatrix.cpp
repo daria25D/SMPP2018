@@ -130,7 +130,7 @@ uint64_t get_time(char * a, char * b, char * c, char * order) {
         }
         delete_matrix<double>(A, N_a);
     }    
-    return time_mul;
+    return time_mul/(double)CLOCKS_PER_SEC ;
 }
 
 int main(int argc, char **argv) {
@@ -152,6 +152,6 @@ int main(int argc, char **argv) {
         cerr << "An error occured";
         return -1;
     }
-    cout << setprecision(8) << fixed << time_mul/(double)CLOCKS_PER_SEC << endl;
+    cout << setprecision(8) << fixed << time_mul<< endl;
     return 0;
 }
