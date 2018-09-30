@@ -75,7 +75,7 @@ void delete_matrix(T ** M, uint64_t rows) {
     }
     delete[] M;
 }
-uint64_t get_time(char * a, char * b, char * c, char * order) {
+double get_time(char * a, char * b, char * c, char * order) {
     fstream a_f, b_f;
     a_f.open(a, ios::binary | ios::in);
     b_f.open(b, ios::binary | ios::in);
@@ -139,7 +139,7 @@ int main(int argc, char **argv) {
         cerr << "Wrong number of arguments";
         return -1;
     }
-    uint64_t time_mul;
+    double time_mul;
     try{
         time_mul = get_time(argv[1], argv[2], argv[3], argv[4]);
         if (time_mul == -1) throw "Invalid data caused an error";
@@ -152,6 +152,6 @@ int main(int argc, char **argv) {
         cerr << "An error occured";
         return -1;
     }
-    cout << setprecision(8) << fixed << time_mul<< endl;
+    cout << setprecision(8) << fixed << time_mul<< " ";
     return 0;
 }

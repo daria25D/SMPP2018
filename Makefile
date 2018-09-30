@@ -21,9 +21,32 @@ test:
 	./test.sh ./test/A3.dat ./test/B3.dat ./test/C03.dat test3.txt
 
 report: 
-	./script.sh d 300 300 d 300 300 plot300.svg
-	./script.sh f 500 500 f 500 500 plot500.svg
-	./script.sh d 1000 1000 f 1000 1000 plot1000.svg
+	> time_all.txt
+	./script.sh d 300 300 d 300 300  time_all.txt   
+	./script.sh d 300 300 d 300 300  time_all.txt  
+	./script.sh d 300 300 d 300 300  time_all.txt  
+	./script.sh d 300 300 d 300 300  time_all.txt  
+	./script.sh d 300 300 d 300 300  time_all.txt  
+	./average.sh  time_all.txt time_average.txt 
+	./plot.sh plot300av.svg "test 300 average (double)"
+
+	> time_all.txt
+	./script.sh f 500 500 f 500 500  time_all.txt 
+	./script.sh f 500 500 f 500 500  time_all.txt
+	./script.sh f 500 500 f 500 500  time_all.txt
+	./script.sh f 500 500 f 500 500  time_all.txt
+	./script.sh f 500 500 f 500 500  time_all.txt
+	./average.sh  time_all.txt time_average.txt 
+	./plot.sh plot500av.svg "test 500 average (float)"
+	
+	> time_all.txt
+	./script.sh d 1000 1000 d 1000 1000  time_all.txt  
+	./script.sh d 1000 1000 d 1000 1000  time_all.txt    
+	./script.sh d 1000 1000 d 1000 1000  time_all.txt    
+	./script.sh d 1000 1000 d 1000 1000  time_all.txt    
+	./script.sh d 1000 1000 d 1000 1000  time_all.txt      
+	./average.sh  time_all.txt time_average.txt 
+	./plot.sh plot1000av.svg "test 1000 average (double)"
 
 clean:
 	rm -rf $(TARGET) *.o

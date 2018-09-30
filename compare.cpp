@@ -13,18 +13,11 @@ int compare(fstream & f1, fstream & f2, uint64_t n, uint64_t m) {
         for (int j = 0; j < m; j++) {
             f1.read((char *)&a, sizeof(T));
             f2.read((char *)&b, sizeof(T));
-            if ((a - b) ) {
-                return 1;
+            if ((a - b) > EPSILON) {
+                return 0;
             } 
         }
     return 1;    
-}
-
-template <typename T>
-void read_matrix(T ** f, uint64_t n, uint64_t m, fstream & s) {
-    for (int i = 0; i < n; i++) 
-        for (int j = 0; j < m; j++) 
-            s.read((char *)&(f[i][j]), sizeof(T));    
 }
 
 int main(int argc, char ** argv) {
