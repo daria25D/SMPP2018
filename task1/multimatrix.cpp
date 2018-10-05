@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
     double time_mul;
     try{
         time_mul = get_time(argv[1], argv[2], argv[3], argv[4]);
-        if (time_mul == -1) throw "Invalid data caused an error";
+        if (time_mul == -1) throw "Invalid data caused an error.";
     } catch (const char * s) {
         cerr << s;
         return -1;

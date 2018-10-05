@@ -1,8 +1,9 @@
 //./compare A.dat B.dat
 #include <iostream>
 #include <fstream>
+#include <cmath>
 
-#define EPSILON 0.0001
+#define EPSILON 1.0e-10 
 using namespace std;
 
 template<typename T> 
@@ -13,7 +14,7 @@ int compare(fstream & f1, fstream & f2, uint64_t n, uint64_t m) {
         for (int j = 0; j < m; j++) {
             f1.read((char *)&a, sizeof(T));
             f2.read((char *)&b, sizeof(T));
-            if ((a - b) > EPSILON) {
+            if (fabs(a - b) > EPSILON) {
                 return 0;
             } 
         }
@@ -58,7 +59,7 @@ int main(int argc, char ** argv) {
             cout << "Matrices are equal" << endl;
         } else cout << "Matrices are NOT equal" << endl;
     } else if (type_a == 'd') {
-        if (compare<float>(a, b, n_a, m_b) == 1) {
+        if (compare<double>(a, b, n_a, m_b) == 1) {
            cout << "Matrices are equal" << endl;
         } else cout << "Matrices are NOT equal" << endl;
     }     
