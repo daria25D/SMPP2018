@@ -15,7 +15,7 @@ generate: multiply
 	./generate.sh d 10 10 d 10 10 A2.dat B2.dat C02.dat
 	./generate.sh f 20 20 f 20 20 A3.dat B3.dat C03.dat
 
-test: 
+test: multiply
 	./test.sh ./test/A1.dat ./test/B1.dat ./test/C01.dat test1.txt
 	./test.sh ./test/A2.dat ./test/B2.dat ./test/C02.dat test2.txt
 	./test.sh ./test/A3.dat ./test/B3.dat ./test/C03.dat test3.txt
