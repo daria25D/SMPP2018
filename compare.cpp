@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 
-#define EPSILON 0.0001
+#define EPSILON 1.0e-10
 using namespace std;
 
 template<typename T> 
