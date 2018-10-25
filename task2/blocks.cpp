@@ -1,5 +1,5 @@
 //g++ -I/usr/local/include -O0 blocks.cpp /usr/local/lib/libpapi.a -o blocks
-// ./blocks A.dat B.dat C.dat size_of_block
+// ./blocks A.dat B.dat C.dat {0, 1} size_of_block [...parameters...]
 #include <iostream>
 #include <fstream>
 #include <ctime>
@@ -7,7 +7,7 @@
 #include <inttypes.h>
 #include <papi.h>
 #include <vector>
-#include <papiStdEventDefs.h>
+#include <cmath>
 
 #define NUMBER_OF_COUNTERS 7
 #define NUMBER_OF_ARGC 6
@@ -70,7 +70,7 @@ double get_time(char * a, char * b, char * c, char mode, uint64_t size_of_block)
     b_f.read((char *)&N_b, sizeof(N_b));
     b_f.read((char *)&M_b, sizeof(M_b));
     fstream c_f(c, ios::binary | ios::out);
-	if (N_b != M_a) return -1; // throw error
+	if (N_b != M_a) throw "Invalid sizes";
 	float ** A = init_matrix(N_a, M_a);
     read_matrix(A, N_a, M_a, a_f); 
 	float ** B = init_matrix(N_b, M_b);
@@ -110,26 +110,37 @@ int main(int argc, char ** argv) {
 	uint64_t size_of_block;
     sscanf(argv[4], "%d", &mode);
 	sscanf(argv[5], "%", SCNd64, &size_of_block); 
-    if ((mode != 0 && mode != 1) || size_of_block < 1) {
-        cerr << "Invalid parameters" << endl;
-        return -1;
-    }
+    //if ((mode != 0 && mode != 1) || (strcmp(argv[4], "0") !=0 && strcmp(argv[4], "1") != 0) || size_of_block < 1) {
+      //  cerr << "Invalid parameters" << endl;
+        //return -1;
+    //}
     double time_mul;
     int NUMBER_OF_EVENTS, retval;
     long long * values;
     int COUNTERS[NUMBER_OF_COUNTERS];
     int * events;
     vector<string> NAMES;
-    if (argc - NUMBER_OF_ARGC > 0) { //there are counters to compute
+    if (argc - NUMBER_OF_ARGC >= 0 || size_of_block == 0 || strcmp(argv[5], "0") == 0) { //there are counters to compute
         if ((retval = PAPI_library_init(PAPI_VER_CURRENT)) != PAPI_VER_CURRENT) {
             handle_error(retval);
         }
-        NUMBER_OF_EVENTS = argc - NUMBER_OF_ARGC;
+        const PAPI_hw_info_t * info = PAPI_get_hardware_info();
+        if (info == NULL) {
+            handle_error(1);
+        }
+        if (size_of_block == 0 || strcmp(argv[5], "0") == 0) {
+            size_of_block = info->mem_hierarchy.level[0].cache[0].size;
+            //cout << "Cache L1 size is: " << size_of_block << endl;
+            size_of_block = (int)floor(sqrt(size_of_block / (sizeof(float)*3)));
+            //cout << "Size of block is: " << size_of_block << endl;
+        } else {
+            size_of_block = 32;
+        }
+        NUMBER_OF_EVENTS = (argc - NUMBER_OF_ARGC)/2;
         values = new long long[NUMBER_OF_EVENTS];
         memset(COUNTERS, 0, sizeof(int) * NUMBER_OF_COUNTERS);
         events = new int[NUMBER_OF_EVENTS];
-        // MAKE A MAP OUT OF THIS?
-        for (int i = NUMBER_OF_ARGC; i < argc; i++) {
+        for (int i = NUMBER_OF_ARGC; i < argc - NUMBER_OF_EVENTS; i++) {
             int counter;
             sscanf(argv[i], "%d", &counter);
             bool flag = false;
@@ -199,7 +210,7 @@ int main(int argc, char ** argv) {
         time_mul = get_time(argv[1], argv[2], argv[3], mode, size_of_block);
         if (time_mul == -1) throw "Invalid data caused an error";
     } catch (const char * s) {
-        cerr << s;
+        cerr << s << endl;
         return -1;
     } catch (exception &e) {
         cerr << e.what();
@@ -207,11 +218,13 @@ int main(int argc, char ** argv) {
         cerr << "An error occured" << endl;
         return -1;
     }	
-    if (argc - NUMBER_OF_ARGC > 0) {
+    if (argc - NUMBER_OF_ARGC >= 0 || strcmp(argv[5], "0") == 0) {
         if ((retval = PAPI_stop_counters(values, NUMBER_OF_EVENTS))!= PAPI_OK)
             handle_error(retval);
         for (int i = 0; i < NUMBER_OF_EVENTS; i++) {
-            cout << NAMES[i] << ": " << values[i] << endl;
+            fstream f;
+            f.open(argv[i + NUMBER_OF_ARGC + NUMBER_OF_EVENTS], ios::out | ios::app);
+            f << NAMES[i] << ": " << values[i] << endl;
         }
         delete []values;
         delete []events;
