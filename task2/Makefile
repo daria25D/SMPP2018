@@ -64,6 +64,8 @@ report1000: blocks
 	./plot.sh ./report/cyc00.txt ./report/cyc10.txt ./report/cyc01.txt ./report/cyc11.txt 1000_CYC.svg "CYC 32 ijk" "CYC 32 ikj" "CYC opt ijk" "CYC opt ikj"
 	./processdat.sh ./report/ins_32_ijk.txt ./report/ins_32_ikj.txt ./report/ins_opt_ijk.txt ./report/ins_opt_ikj.txt ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 3 
 	./plot.sh ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 1000_INS.svg "INS 32 ijk" "INS 32 ikj" "INS opt ijk" "INS opt ikj" 
+	./processdat.sh ./report/report_32_ijk.txt ./report/report_32_ikj.txt ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt ./report/report00.txt ./report/report10.txt ./report/report01.txt ./report/report11.txt 2
+	./plot.sh ./report/report00.txt ./report/report10.txt ./report/report01.txt ./report/report11.txt 1000_TIME.svg "TIME 32 ijk" "TIME 32 ikj" "TIME opt ijk" "TIME opt ikj"
 
 
 report2000: blocks
@@ -101,6 +103,9 @@ report2000: blocks
 	./plot.sh ./report/cyc00.txt ./report/cyc10.txt ./report/cyc01.txt ./report/cyc11.txt 2000_CYC.svg "CYC 32 ijk" "CYC 32 ikj" "CYC opt ijk" "CYC opt ikj"
 	./processdat.sh ./report/ins_32_ijk.txt ./report/ins_32_ikj.txt ./report/ins_opt_ijk.txt ./report/ins_opt_ikj.txt ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 3 
 	./plot.sh ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 2000_INS.svg "INS 32 ijk" "INS 32 ikj" "INS opt ijk" "INS opt ikj" 
+	./processdat.sh ./report/report_32_ijk.txt ./report/report_32_ikj.txt ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt ./report/report00.txt ./report/report10.txt ./report/report01.txt ./report/report11.txt 2
+	./plot.sh ./report/report00.txt ./report/report10.txt ./report/report01.txt ./report/report11.txt 2000_TIME.svg "TIME 32 ijk" "TIME 32 ikj" "TIME opt ijk" "TIME opt ikj"
+
 
 report3000: blocks
 	$(CMPLFLAGS) generate.cpp -o generate 
@@ -137,6 +142,8 @@ report3000: blocks
 	./plot.sh ./report/cyc00.txt ./report/cyc10.txt ./report/cyc01.txt ./report/cyc11.txt 3000_CYC.svg "CYC 32 ijk" "CYC 32 ikj" "CYC opt ijk" "CYC opt ikj"
 	./processdat.sh ./report/ins_32_ijk.txt ./report/ins_32_ikj.txt ./report/ins_opt_ijk.txt ./report/ins_opt_ikj.txt ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 3 
 	./plot.sh ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 3000_INS.svg "INS 32 ijk" "INS 32 ikj" "INS opt ijk" "INS opt ikj" 
+	./processdat.sh ./report/report_32_ijk.txt ./report/report_32_ikj.txt ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt ./report/report00.txt ./report/report10.txt ./report/report01.txt ./report/report11.txt 2
+	./plot.sh ./report/report00.txt ./report/report10.txt ./reprot/report01.txt ./report/report11.txt 3000_TIME.svg "TIME 32 ijk" "TIME 32 ikj" "TIME opt ijk" "TIME opt ikj"
 
 
 clean:
