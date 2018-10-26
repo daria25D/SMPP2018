@@ -1,4 +1,4 @@
-//./generate type rows columns file
+//./generate rows columns file
 #include <iostream>
 #include <fstream>
 #include <limits>
@@ -14,44 +14,32 @@ T new_random(T dMin, T dMax)
 
 int main(int argc, char **argv) {
     //./generate type rows columns file
-    if (argc != 5) {
+    if (argc != 4) {
         cerr << "Wrong number of arguments";
         return -1;
     }
     srand(time(NULL));
-    char type;
-    sscanf(argv[1], "%c", &type);
-    if (type != 'f' && type != 'd') {
-        cerr << "Invalid type";
-        return -1;
-    }
     uint64_t n, m;
     try {
-        n = strtoull(argv[2], NULL, 0);
-        m = strtoull(argv[3], NULL, 0);
+        n = strtoull(argv[1], NULL, 0);
+        m = strtoull(argv[2], NULL, 0);
     } catch (exception & e) {
         cerr << e.what();
         return -1;
     }
-    fstream file(argv[4], ios::binary | ios::out);
+    fstream file(argv[3], ios::binary | ios::out);
     if (!file.is_open()) {
         cerr << "Cannot open file";
         return -1;
     }
-    //file.write((char *)&type, sizeof(type));
     file.write((char *)&n, sizeof(n));
     file.write((char *)&m, sizeof(m));
     try {
         for (int i = 0; i < n; i++)
-            for (int j = 0; j < m; j++) 
-                if (type == 'f') {
-                    float fr = new_random<float>(-INT16_MAX + 1, INT16_MAX);
-                    file.write((char *)&fr, sizeof(float));
-                } else {
-                    double dr = new_random<double>(-INT16_MAX + 1, INT16_MAX);
-                    file.write((char *)&dr, sizeof(double));
-                }
-        
+            for (int j = 0; j < m; j++) {
+                float fr = new_random<float>(-INT16_MAX + 1, INT16_MAX);
+                file.write((char *)&fr, sizeof(float));
+            }
     } catch (exception & e) {
         cerr << e.what();
         return -1;
