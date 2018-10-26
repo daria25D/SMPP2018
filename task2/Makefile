@@ -1,11 +1,11 @@
-TARGET=multimatrix generate print compare
+TARGET=blocks generate print compare
 CMPLFLAGS=g++ -g -O2
 REPORT00=./report/l1_32_ijk.txt ./report/l2_32_ijk.txt ./report/l3_32_ijk.txt ./report/tlbim_32_ijk.txt ./report/tlbdm_32_ijk.txt ./report/cyc_32_ijk.txt ./report/ins_32_ijk.txt 
 REPORT10=./report/l1_32_ikj.txt ./report/l2_32_ikj.txt ./report/l3_32_ikj.txt ./report/tlbim_32_ikj.txt ./report/tlbdm_32_ikj.txt ./report/cyc_32_ikj.txt ./report/ins_32_ikj.txt 
 REPORT01=./report/l1_opt_ijk.txt ./report/l2_opt_ijk.txt ./report/l3_opt_ijk.txt ./report/tlbim_opt_ijk.txt ./report/tlbdm_opt_ijk.txt ./report/cyc_opt_ijk.txt ./report/ins_opt_ijk.txt 
 REPORT11=./report/l1_opt_ikj.txt ./report/l2_opt_ikj.txt ./report/l3_opt_ikj.txt ./report/tlbim_opt_ikj.txt ./report/tlbdm_opt_ikj.txt ./report/cyc_opt_ikj.txt ./report/ins_opt_ikj.txt 
 .PHONY: test report
-.SILENT: all blocks generate test report1000 report2000 report3000 clean print
+.SILENT: all blocks generate test report1000 report2000 report3000 report4000 clean print
 all: blocks compare print generate
 
 print:
@@ -143,7 +143,83 @@ report3000: blocks
 	./processdat.sh ./report/ins_32_ijk.txt ./report/ins_32_ikj.txt ./report/ins_opt_ijk.txt ./report/ins_opt_ikj.txt ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 3 
 	./plot.sh ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 3000_INS.svg "INS 32 ijk" "INS 32 ikj" "INS opt ijk" "INS opt ikj" 
 	./processdat.sh ./report/report_32_ijk.txt ./report/report_32_ikj.txt ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt ./report/report00.txt ./report/report10.txt ./report/report01.txt ./report/report11.txt 2
-	./plot.sh ./report/report00.txt ./report/report10.txt ./reprot/report01.txt ./report/report11.txt 3000_TIME.svg "TIME 32 ijk" "TIME 32 ikj" "TIME opt ijk" "TIME opt ikj"
+	./plot.sh ./report/report00.txt ./report/report10.txt ./report/report01.txt ./report/report11.txt 3000_TIME.svg "TIME 32 ijk" "TIME 32 ikj" "TIME opt ijk" "TIME opt ikj"
+
+report4000: blocks
+	$(CMPLFLAGS) generate.cpp -o generate 
+	mkdir -p report
+	> ./report/report_32_ijk.txt && > ./report/report_opt_ijk.txt && > ./report/report_32_ikj.txt && > ./report/report_opt_ikj.txt
+	> ./report/l1_32_ijk.txt && > ./report/l1_opt_ijk.txt && > ./report/l1_32_ikj.txt && > ./report/l1_opt_ikj.txt 
+	> ./report/l2_32_ijk.txt && > ./report/l2_opt_ijk.txt && > ./report/l2_32_ikj.txt && > ./report/l2_opt_ikj.txt
+	> ./report/l3_32_ijk.txt && > ./report/l3_opt_ijk.txt && > ./report/l3_32_ikj.txt && > ./report/l3_opt_ikj.txt
+	> ./report/tlbim_32_ijk.txt && > ./report/tlbim_opt_ijk.txt && > ./report/tlbim_32_ikj.txt && > ./report/tlbim_opt_ikj.txt
+	> ./report/tlbdm_32_ijk.txt && > ./report/tlbdm_opt_ijk.txt && > ./report/tlbdm_32_ikj.txt && > ./report/tlbdm_opt_ikj.txt
+	> ./report/cyc_32_ijk.txt && > ./report/cyc_opt_ijk.txt && > ./report/cyc_32_ikj.txt && > ./report/cyc_opt_ikj.txt
+	> ./report/ins_32_ijk.txt && > ./report/ins_opt_ijk.txt && > ./report/ins_32_ikj.txt && > ./report/ins_opt_ikj.txt
+	./report.sh 4000 4000 4000 4000 32 ./report/report_32_ijk.txt ./report/report_32_ikj.txt $(REPORT00) $(REPORT10)
+	./report.sh 4000 4000 4000 4000 32 ./report/report_32_ijk.txt ./report/report_32_ikj.txt $(REPORT00) $(REPORT10)
+	./report.sh 4000 4000 4000 4000 32 ./report/report_32_ijk.txt ./report/report_32_ikj.txt $(REPORT00) $(REPORT10)
+	./report.sh 4000 4000 4000 4000 32 ./report/report_32_ijk.txt ./report/report_32_ikj.txt $(REPORT00) $(REPORT10)
+	./report.sh 4000 4000 4000 4000 32 ./report/report_32_ijk.txt ./report/report_32_ikj.txt $(REPORT00) $(REPORT10)
+	./report.sh 4000 4000 4000 4000 0 ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt $(REPORT01) $(REPORT11)
+	./report.sh 4000 4000 4000 4000 0 ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt $(REPORT01) $(REPORT11)
+	./report.sh 4000 4000 4000 4000 0 ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt $(REPORT01) $(REPORT11)
+	./report.sh 4000 4000 4000 4000 0 ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt $(REPORT01) $(REPORT11)
+	./report.sh 4000 4000 4000 4000 0 ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt $(REPORT01) $(REPORT11)
+	./processdat.sh ./report/l1_32_ijk.txt ./report/l1_32_ikj.txt ./report/l1_opt_ijk.txt ./report/l1_opt_ikj.txt ./report/l100.txt ./report/l110.txt ./report/l101.txt ./report/l111.txt 5 
+	./plot.sh ./report/l100.txt ./report/l110.txt ./report/l101.txt ./report/l111.txt 4000_L1.svg "L1 32 ijk" "L1 32 ikj" "L1 opt ijk" "L1 opt ikj" 
+	./processdat.sh ./report/l2_32_ijk.txt ./report/l2_32_ikj.txt ./report/l2_opt_ijk.txt ./report/l2_opt_ikj.txt ./report/l200.txt ./report/l210.txt ./report/l201.txt ./report/l211.txt 5 
+	./plot.sh ./report/l200.txt ./report/l210.txt ./report/l201.txt ./report/l211.txt 4000_L2.svg "L2 32 ijk" "L2 32 ikj" "L2 opt ijk" "L2 opt ikj"
+	./processdat.sh ./report/l3_32_ijk.txt ./report/l3_32_ikj.txt ./report/l3_opt_ijk.txt ./report/l3_opt_ikj.txt ./report/l300.txt ./report/l310.txt ./report/l301.txt ./report/l311.txt 5 
+	./plot.sh ./report/l300.txt ./report/l310.txt ./report/l301.txt ./report/l311.txt 4000_L3.svg "L3 32 ijk" "L3 32 ikj" "L3 opt ijk" "L3 opt ikj"
+	./processdat.sh ./report/tlbim_32_ijk.txt ./report/tlbim_32_ikj.txt ./report/tlbim_opt_ijk.txt ./report/tlbim_opt_ikj.txt ./report/tlbim00.txt ./report/tlbim10.txt ./report/tlbim01.txt ./report/tlbim11.txt 6
+	./plot.sh ./report/tlbim00.txt ./report/tlbim10.txt ./report/tlbim01.txt ./report/tlbim11.txt 4000_TLBIM.svg "TLBIM 32 ijk" "TLBIM 32 ikj" "TLBIM opt ijk" "TLBIM opt ikj"
+	./processdat.sh ./report/tlbdm_32_ijk.txt ./report/tlbdm_32_ikj.txt ./report/tlbdm_opt_ijk.txt ./report/tlbdm_opt_ikj.txt ./report/tlbdm00.txt ./report/tlbdm10.txt ./report/tlbdm01.txt ./report/tlbdm11.txt 6 
+	./plot.sh ./report/tlbdm00.txt ./report/tlbdm10.txt ./report/tlbdm01.txt ./report/tlbdm11.txt 4000_TLBDM.svg "TLBDM 32 ijk" "TLBDM 32 ikj" "TLBDM opt ijk" "TLBDM opt ikj"
+	./processdat.sh ./report/cyc_32_ijk.txt ./report/cyc_32_ikj.txt ./report/cyc_opt_ijk.txt ./report/cyc_opt_ikj.txt ./report/cyc00.txt ./report/cyc10.txt ./report/cyc01.txt ./report/cyc11.txt 3
+	./plot.sh ./report/cyc00.txt ./report/cyc10.txt ./report/cyc01.txt ./report/cyc11.txt 4000_CYC.svg "CYC 32 ijk" "CYC 32 ikj" "CYC opt ijk" "CYC opt ikj"
+	./processdat.sh ./report/ins_32_ijk.txt ./report/ins_32_ikj.txt ./report/ins_opt_ijk.txt ./report/ins_opt_ikj.txt ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 3 
+	./plot.sh ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 4000_INS.svg "INS 32 ijk" "INS 32 ikj" "INS opt ijk" "INS opt ikj" 
+	./processdat.sh ./report/report_32_ijk.txt ./report/report_32_ikj.txt ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt ./report/report00.txt ./report/report10.txt ./report/report01.txt ./report/report11.txt 2
+	./plot.sh ./report/report00.txt ./report/report10.txt ./report/report01.txt ./report/report11.txt 4000_TIME.svg "TIME 32 ijk" "TIME 32 ikj" "TIME opt ijk" "TIME opt ikj"
+
+report5000: blocks
+	$(CMPLFLAGS) generate.cpp -o generate 
+	mkdir -p report
+	> ./report/report_32_ijk.txt && > ./report/report_opt_ijk.txt && > ./report/report_32_ikj.txt && > ./report/report_opt_ikj.txt
+	> ./report/l1_32_ijk.txt && > ./report/l1_opt_ijk.txt && > ./report/l1_32_ikj.txt && > ./report/l1_opt_ikj.txt 
+	> ./report/l2_32_ijk.txt && > ./report/l2_opt_ijk.txt && > ./report/l2_32_ikj.txt && > ./report/l2_opt_ikj.txt
+	> ./report/l3_32_ijk.txt && > ./report/l3_opt_ijk.txt && > ./report/l3_32_ikj.txt && > ./report/l3_opt_ikj.txt
+	> ./report/tlbim_32_ijk.txt && > ./report/tlbim_opt_ijk.txt && > ./report/tlbim_32_ikj.txt && > ./report/tlbim_opt_ikj.txt
+	> ./report/tlbdm_32_ijk.txt && > ./report/tlbdm_opt_ijk.txt && > ./report/tlbdm_32_ikj.txt && > ./report/tlbdm_opt_ikj.txt
+	> ./report/cyc_32_ijk.txt && > ./report/cyc_opt_ijk.txt && > ./report/cyc_32_ikj.txt && > ./report/cyc_opt_ikj.txt
+	> ./report/ins_32_ijk.txt && > ./report/ins_opt_ijk.txt && > ./report/ins_32_ikj.txt && > ./report/ins_opt_ikj.txt
+	./report.sh 5000 5000 5000 5000 32 ./report/report_32_ijk.txt ./report/report_32_ikj.txt $(REPORT00) $(REPORT10)
+	./report.sh 5000 5000 5000 5000 32 ./report/report_32_ijk.txt ./report/report_32_ikj.txt $(REPORT00) $(REPORT10)
+	./report.sh 5000 5000 5000 5000 32 ./report/report_32_ijk.txt ./report/report_32_ikj.txt $(REPORT00) $(REPORT10)
+	./report.sh 5000 5000 5000 5000 32 ./report/report_32_ijk.txt ./report/report_32_ikj.txt $(REPORT00) $(REPORT10)
+	./report.sh 5000 5000 5000 5000 32 ./report/report_32_ijk.txt ./report/report_32_ikj.txt $(REPORT00) $(REPORT10)
+	./report.sh 5000 5000 5000 5000 0 ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt $(REPORT01) $(REPORT11)
+	./report.sh 5000 5000 5000 5000 0 ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt $(REPORT01) $(REPORT11)
+	./report.sh 5000 5000 5000 5000 0 ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt $(REPORT01) $(REPORT11)
+	./report.sh 5000 5000 5000 5000 0 ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt $(REPORT01) $(REPORT11)
+	./report.sh 5000 5000 5000 5000 0 ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt $(REPORT01) $(REPORT11)
+	./processdat.sh ./report/l1_32_ijk.txt ./report/l1_32_ikj.txt ./report/l1_opt_ijk.txt ./report/l1_opt_ikj.txt ./report/l100.txt ./report/l110.txt ./report/l101.txt ./report/l111.txt 5 
+	./plot.sh ./report/l100.txt ./report/l110.txt ./report/l101.txt ./report/l111.txt 5000_L1.svg "L1 32 ijk" "L1 32 ikj" "L1 opt ijk" "L1 opt ikj" 
+	./processdat.sh ./report/l2_32_ijk.txt ./report/l2_32_ikj.txt ./report/l2_opt_ijk.txt ./report/l2_opt_ikj.txt ./report/l200.txt ./report/l210.txt ./report/l201.txt ./report/l211.txt 5 
+	./plot.sh ./report/l200.txt ./report/l210.txt ./report/l201.txt ./report/l211.txt 5000_L2.svg "L2 32 ijk" "L2 32 ikj" "L2 opt ijk" "L2 opt ikj"
+	./processdat.sh ./report/l3_32_ijk.txt ./report/l3_32_ikj.txt ./report/l3_opt_ijk.txt ./report/l3_opt_ikj.txt ./report/l300.txt ./report/l310.txt ./report/l301.txt ./report/l311.txt 5 
+	./plot.sh ./report/l300.txt ./report/l310.txt ./report/l301.txt ./report/l311.txt 5000_L3.svg "L3 32 ijk" "L3 32 ikj" "L3 opt ijk" "L3 opt ikj"
+	./processdat.sh ./report/tlbim_32_ijk.txt ./report/tlbim_32_ikj.txt ./report/tlbim_opt_ijk.txt ./report/tlbim_opt_ikj.txt ./report/tlbim00.txt ./report/tlbim10.txt ./report/tlbim01.txt ./report/tlbim11.txt 6
+	./plot.sh ./report/tlbim00.txt ./report/tlbim10.txt ./report/tlbim01.txt ./report/tlbim11.txt 5000_TLBIM.svg "TLBIM 32 ijk" "TLBIM 32 ikj" "TLBIM opt ijk" "TLBIM opt ikj"
+	./processdat.sh ./report/tlbdm_32_ijk.txt ./report/tlbdm_32_ikj.txt ./report/tlbdm_opt_ijk.txt ./report/tlbdm_opt_ikj.txt ./report/tlbdm00.txt ./report/tlbdm10.txt ./report/tlbdm01.txt ./report/tlbdm11.txt 6 
+	./plot.sh ./report/tlbdm00.txt ./report/tlbdm10.txt ./report/tlbdm01.txt ./report/tlbdm11.txt 5000_TLBDM.svg "TLBDM 32 ijk" "TLBDM 32 ikj" "TLBDM opt ijk" "TLBDM opt ikj"
+	./processdat.sh ./report/cyc_32_ijk.txt ./report/cyc_32_ikj.txt ./report/cyc_opt_ijk.txt ./report/cyc_opt_ikj.txt ./report/cyc00.txt ./report/cyc10.txt ./report/cyc01.txt ./report/cyc11.txt 3
+	./plot.sh ./report/cyc00.txt ./report/cyc10.txt ./report/cyc01.txt ./report/cyc11.txt 5000_CYC.svg "CYC 32 ijk" "CYC 32 ikj" "CYC opt ijk" "CYC opt ikj"
+	./processdat.sh ./report/ins_32_ijk.txt ./report/ins_32_ikj.txt ./report/ins_opt_ijk.txt ./report/ins_opt_ikj.txt ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 3 
+	./plot.sh ./report/ins00.txt ./report/ins10.txt ./report/ins01.txt ./report/ins11.txt 5000_INS.svg "INS 32 ijk" "INS 32 ikj" "INS opt ijk" "INS opt ikj" 
+	./processdat.sh ./report/report_32_ijk.txt ./report/report_32_ikj.txt ./report/report_opt_ijk.txt ./report/report_opt_ikj.txt ./report/report00.txt ./report/report10.txt ./report/report01.txt ./report/report11.txt 2
+	./plot.sh ./report/report00.txt ./report/report10.txt ./report/report01.txt ./report/report11.txt 5000_TIME.svg "TIME 32 ijk" "TIME 32 ikj" "TIME opt ijk" "TIME opt ikj"
 
 
 clean:
