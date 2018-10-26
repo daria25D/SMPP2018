@@ -1,20 +1,23 @@
 #!/bin/bash
-F00=$1
-F10=$2
-F01=$3
-F11=$4
-OUT=$5
-TITLE00=$6
-TITLE10=$7
-TITLE01=$8
-TITLE11=$9
-
+F1=$1
+F2=$2
+F3=$3
+F4=$4
+F5=$5
+OUT=$6
+TITLE1=$7
+TITLE2=$8
+TITLE3=$9
+TITLE4=${10}
+TITLE5=${11}
 gnuplot -e "
 set terminal svg size 600,500;
 set output './report/$OUT';
-set xrange [0:4];
-plot '$F00' with linespoint title '$TITLE00',\
-    '$F10' with linespoint title '$TITLE10',\
-    '$F01' with linespoint title '$TITLE01',\
-    '$F11' with linespoint title '$TITLE11'
+set yrange [0:4];
+set xtics ('32 ijk' 0, '32 ikj' 1, 'opt ijk' 2, 'opt ikj' 3)
+plot '$F1' with linespoint title '$TITLE1',\
+    '$F2' with linespoint title '$TITLE2',\
+    '$F3' with linespoint title '$TITLE3',\
+    '$F4' with linespoint title '$TITLE4',\
+    '$F5' with linespoint title '$TITLE5'
 "
