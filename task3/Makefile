@@ -1,6 +1,7 @@
 CMPL=mpic++
-.PHONY eratosthenes check
-.SILENT check eratosthenes
+.PHONY: eratosthenes check
+.SILENT: check eratosthenes
+
 all: eratosthenes
 
 eratosthenes:
