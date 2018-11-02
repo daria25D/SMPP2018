@@ -5,7 +5,7 @@ REPORT10=./report/l1_32_ikj.txt ./report/l2_32_ikj.txt ./report/l3_32_ikj.txt ./
 REPORT01=./report/l1_opt_ijk.txt ./report/l2_opt_ijk.txt ./report/l3_opt_ijk.txt ./report/tlbim_opt_ijk.txt ./report/tlbdm_opt_ijk.txt ./report/cyc_opt_ijk.txt ./report/ins_opt_ijk.txt 
 REPORT11=./report/l1_opt_ikj.txt ./report/l2_opt_ikj.txt ./report/l3_opt_ikj.txt ./report/tlbim_opt_ikj.txt ./report/tlbdm_opt_ikj.txt ./report/cyc_opt_ikj.txt ./report/ins_opt_ikj.txt 
 NAMES="32x32 ijk" "32x32 ikj" "opt ikj"
-.PHONY: test report
+.PHONY: test report generate
 .SILENT: all blocks generate test report1000 report2000 report3000 report4000 report5000 report clean print
 all: blocks compare print generate
 
@@ -18,7 +18,8 @@ compare:
 blocks:
 	g++ -I/usr/local/include -O0 blocks.cpp /usr/local/lib/libpapi.a -o blocks
 
-generate: blocks
+generate: blocks 
+	mkdir -p test
 	$(CMPLFLAGS) generate.cpp -o generate
 	./generate.sh 500 500 500 500 A1.dat B1.dat C01.dat 500
 	./generate.sh 1000 1000 1000 1000 A2.dat B2.dat C02.dat 1000
@@ -26,6 +27,7 @@ generate: blocks
 
 test: compare blocks print
 #change data in test.sh, add size of bloks 
+	mkdir -p test
 	./test.sh ./test/A1.dat ./test/B1.dat ./test/C01.dat test1.txt
 	./test.sh ./test/A2.dat ./test/B2.dat ./test/C02.dat test2.txt
 	./test.sh ./test/A3.dat ./test/B3.dat ./test/C03.dat test3.txt
