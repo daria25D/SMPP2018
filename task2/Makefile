@@ -27,7 +27,6 @@ generate: blocks
 
 test: compare blocks print
 	mkdir -p test
-#change data in test.sh, add size of bloks 
 	./test.sh ./test/A1.dat ./test/B1.dat ./test/C01.dat test1.txt
 	./test.sh ./test/A2.dat ./test/B2.dat ./test/C02.dat test2.txt
 	./test.sh ./test/A3.dat ./test/B3.dat ./test/C03.dat test3.txt
