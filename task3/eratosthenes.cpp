@@ -27,8 +27,8 @@ int main(int argc, char ** argv) {
         return -1;
     }
     int N_SQRT = floor(sqrt(B));    
-	bool * primes_bool = new bool[N_SQRT + 1];
-	int i, j, count = 0;
+    bool * primes_bool = new bool[N_SQRT + 1];
+    int i, j, count = 0;
     memset(primes_bool, true, sizeof(bool) * (N_SQRT + 1));
 	for (i = 2; i <= N_SQRT; i++)
 		if(primes_bool[i])
@@ -68,7 +68,10 @@ int main(int argc, char ** argv) {
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(&sum, &sum_all, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Gather(NUMBERS + part * rank, part, MPI_C_BOOL, NUMBERS, part, MPI_C_BOOL, 0, MPI_COMM_WORLD);
-    if (rank == 0) {   
+    if (rank == 0) {
+    	uint64_t T = clock();
+        cout << "Time of whole proram: " << (T - t_all)/(double)CLOCKS_PER_SEC << endl;
+        cout << "Time of MPI program: " << (T - t_MPI)/(double)CLOCKS_PER_SEC << endl;
         int count1 = 0;
         for (i = 0; i < count; i++) {
             if (PRIMES[i] >= A) {
@@ -81,9 +84,6 @@ int main(int argc, char ** argv) {
         }
         //cout << endl;
         cout << "Number of primes within [A;B]: " << sum_all + count1 << endl; //consider if they are < A
-        uint64_t T = clock();
-        cout << "Time of whole proram: " << (T - t_all)/(double)CLOCKS_PER_SEC << endl;
-        cout << "Time of MPI program: " << (T - t_MPI)/(double)CLOCKS_PER_SEC << endl;
     }
     MPI_Finalize();
 	return 0;
