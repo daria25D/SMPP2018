@@ -81,6 +81,9 @@ double get_time(char * a, char * b, char * c, char mode, uint64_t size_of_block)
 	time_mul = multiply_ijk(A, B, C, N_a, M_b, N_b, size_of_block, c_f);
     else  
 	time_mul = multiply_ikj(A, B, C, N_a, M_b, N_b, size_of_block, c_f);
+    c_f.write((char *)&N_a, sizeof(uint64_t));
+    c_f.write((char *)&M_b, sizeof(uint64_t));
+    write_matrix(C, N_a, M_b, c_f);
     delete_matrix(A, N_a);
     delete_matrix(B, N_b);
     delete_matrix(C, N_a);
@@ -124,11 +127,11 @@ int main(int argc, char ** argv) {
     vector<string> NAMES;
     if (argc - NUMBER_OF_ARGC >= 0 || size_of_block == 0 || strcmp(argv[5], "0") == 0) { //there are counters to compute
         if ((retval = PAPI_library_init(PAPI_VER_CURRENT)) != PAPI_VER_CURRENT) {
-            handle_error(retval);
+            //handle_error(retval);
         }
         const PAPI_hw_info_t * info = PAPI_get_hardware_info();
         if (info == NULL) {
-            handle_error(1);
+            //handle_error(1);
         }
         if (size_of_block == 0 || strcmp(argv[5], "0") == 0) {
             size_of_block = info->mem_hierarchy.level[0].cache[0].size;
@@ -205,8 +208,8 @@ int main(int argc, char ** argv) {
                     return -1;
             }
         }
-        if ((retval = PAPI_start_counters(events, NUMBER_OF_EVENTS)) != PAPI_OK)
-            handle_error(retval);
+        if ((retval = PAPI_start_counters(events, NUMBER_OF_EVENTS)) != PAPI_OK) {}
+            //handle_error(retval);
     }
     try{
         time_mul = get_time(argv[1], argv[2], argv[3], mode, size_of_block);
@@ -220,9 +223,9 @@ int main(int argc, char ** argv) {
         cerr << "An error occured" << endl;
         return -1;
     }	
-    if (argc - NUMBER_OF_ARGC >= 0 || strcmp(argv[5], "0") == 0) {
+    if (argc - NUMBER_OF_ARGC >= 0 || size_of_block == 0 || strcmp(argv[5], "0") == 0) {
         if ((retval = PAPI_stop_counters(values, NUMBER_OF_EVENTS))!= PAPI_OK)
-            handle_error(retval);
+            //handle_error(retval);
         for (int i = 0; i < NUMBER_OF_EVENTS; i++) {
             fstream f;
             f.open(argv[i + NUMBER_OF_ARGC + NUMBER_OF_EVENTS], ios::out | ios::app);
