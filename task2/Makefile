@@ -7,6 +7,7 @@ REPORT11=./report/l1_opt_ikj.txt ./report/l2_opt_ikj.txt ./report/l3_opt_ikj.txt
 NAMES="32x32 ijk" "32x32 ikj" "opt ikj"
 .PHONY: test report generate blocks print compare
 .SILENT: all blocks generate report1000 report2000 report3000 report4000 report5000 report clean print compare
+
 all: blocks compare print generate
 
 print:
@@ -26,6 +27,8 @@ generate: blocks
 	./generate.sh 200 200 200 200 A3.dat B3.dat C03.dat 200
 
 test: compare blocks print
+	mkdir -p test
+#change data in test.sh, add size of bloks 
 	mkdir -p test
 	./test.sh ./test/A1.dat ./test/B1.dat ./test/C01.dat test1.txt
 	./test.sh ./test/A2.dat ./test/B2.dat ./test/C02.dat test2.txt
@@ -203,4 +206,4 @@ clean:
 	rm -rf $(TARGET) *.o
 	rm -rf *.txt 
 	rm -rf ./test/C?.dat
-	#rm -rf report || true
+#rm -rf report || true
