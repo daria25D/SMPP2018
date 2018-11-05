@@ -8,7 +8,6 @@
 #include <unistd.h>
  
 using namespace std;
-#define PATH "/home/daria/Documents/III_course/SMPP/SMPP2018/task3/bin_to_ascii.sh"
 int main(int argc, char ** argv) {
     clock_t t_all = clock();
     if (argc != 4) {
