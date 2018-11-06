@@ -85,7 +85,7 @@ int main(int argc, char ** argv) {
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(&sum, &sum_all, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     if (rank == 0) {
-    	clock_t T = clock();
+        clock_t T = clock();
         cout << "Time of MPI program: " << (T - t_MPI - T_write)/(double)CLOCKS_PER_SEC << endl;
         int count1 = 0;
         for (i = 0; i < count; i++) {
