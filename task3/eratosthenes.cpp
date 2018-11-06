@@ -78,7 +78,7 @@ int main(int argc, char ** argv) {
             string num = to_string(N + i + part * rank) + " ";
             buf = num.c_str();
             MPI_File_write_shared(f, buf, strlen(buf), MPI_CHAR, &status);
-	    }
+        }
     }
     T_write = clock() - T_write;
     delete[] NUMBERS;
