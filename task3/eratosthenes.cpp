@@ -30,10 +30,10 @@ int main(int argc, char ** argv) {
     bool * primes_bool = new bool[N_SQRT + 1];
     int i, j, count = 0;
     memset(primes_bool, true, sizeof(bool) * (N_SQRT + 1));
-	for (i = 2; i <= N_SQRT; i++)
-		if(primes_bool[i])
-			for(j = i * i; j <= N_SQRT; j += i)
-				primes_bool[j] = false;
+    for (i = 2; i <= N_SQRT; i++)
+	    if(primes_bool[i])
+		    for(j = i * i; j <= N_SQRT; j += i)
+			    primes_bool[j] = false;
 	for (i = 2; i <= N_SQRT; i++)
 		if(primes_bool[i]) {
 			count++;
