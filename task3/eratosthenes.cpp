@@ -99,7 +99,6 @@ int main(int argc, char ** argv) {
         cout << "Time of whole program: " << (T - t_all)/(double)CLOCKS_PER_SEC << endl;
         //cout << endl;
         cout << "Number of primes within [A;B]: " << sum_all + count1 << endl; //consider if they are < A
-
     }
     MPI_File_close(&f);
     MPI_Finalize();
