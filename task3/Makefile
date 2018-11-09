@@ -5,9 +5,9 @@ TARGET=eratosthenes check
 
 all: eratosthenes
 
-eratosthenes:
+eratosthenes: eratosthenes.cpp
 	$(CMPL) eratosthenes.cpp -o eratosthenes
-check:
+check: check.cpp
 	g++ -g check.cpp -o check
 test: eratosthenes check
 	mkdir -p test
