@@ -20,5 +20,9 @@ test: eratosthenes check
 
 clean:
 	rm -rf $(TARGET) *.o
+<<<<<<< HEAD
 	rm *.txt
 	rm -rf ./test/
+=======
+	rm -rf ./test/
+>>>>>>> ff963ddbf8fbc39bd8872de54e93597497267fae
