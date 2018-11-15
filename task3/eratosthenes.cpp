@@ -5,10 +5,8 @@
 #include <cstdlib>
 #include <fstream>
 #include <mpi.h>
-#include <unistd.h>
  
 using namespace std;
-#define PATH "/home/daria/Documents/III_course/SMPP/SMPP2018/task3/bin_to_ascii.sh"
 int main(int argc, char ** argv) {
     clock_t t_all = clock();
     if (argc != 4) {
@@ -65,23 +63,30 @@ int main(int argc, char ** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &nproc);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     int part = (B - N + 1)/nproc + 1;
+    //cout << nproc << endl;
+    //cout << part << endl;
     bool * NUMBERS = new bool[part];
     memset(NUMBERS, true, sizeof(bool) * part);
     for (i = 0; i < part && N + i + part * rank <= B; i++) {
         for (j = 0; j < count; j++) {
-            if ((N + i + part * rank) % PRIMES[j] == 0) NUMBERS[i] = false;
+            int k = N + i + part * rank;
+            if (k % PRIMES[j] == 0) {
+                NUMBERS[i] = false;
+                break;
+            }
         }
     }
     clock_t T_write = clock();
     for (i = 0; i < part && N + i + part * rank <= B; i++) {
         if (NUMBERS[i]) {
             sum++;
-            string num = " " + to_string(N + i + part * rank) + " ";
+            string num = to_string(N + i + part * rank) + " ";
             buf = num.c_str();
             MPI_File_write_shared(f, buf, strlen(buf), MPI_CHAR, &status);
 		 }
     }
     T_write = clock() - T_write;
+    delete[] NUMBERS;
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(&sum, &sum_all, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     if (rank == 0) {
@@ -90,7 +95,7 @@ int main(int argc, char ** argv) {
         int count1 = 0;
         for (i = 0; i < count; i++) {
             if (PRIMES[i] >= A) {
-                string num = " " + to_string(PRIMES[i]) + " ";
+                string num = to_string(PRIMES[i]) + " ";
                 buf = num.c_str();
                 MPI_File_write_shared(f, buf, strlen(buf), MPI_CHAR, &status);
                 count1++;
@@ -102,6 +107,7 @@ int main(int argc, char ** argv) {
         cout << "Number of primes within [A;B]: " << sum_all + count1 << endl; //consider if they are < A
 
     }
+    delete[] PRIMES;
     MPI_File_close(&f);
     MPI_Finalize();
 	return 0;

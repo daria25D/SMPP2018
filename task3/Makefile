@@ -1,4 +1,4 @@
-CMPL=mpic++
+CMPL=mpic++ -std=c++11
 TARGET=eratosthenes check
 .PHONY: eratosthenes check
 .SILENT: check eratosthenes
@@ -20,4 +20,5 @@ test: eratosthenes check
 
 clean:
 	rm -rf $(TARGET) *.o
+	rm *.txt
 	rm -rf ./test/
