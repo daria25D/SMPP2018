@@ -1,12 +1,14 @@
 CMPL=mpic++ -std=c++11
 TARGET=eratosthenes check
 .PHONY: eratosthenes check
-.SILENT: check eratosthenes
+.SILENT: check eratosthenes pthread
 
 all: eratosthenes
 
 eratosthenes: eratosthenes.cpp
 	$(CMPL) eratosthenes.cpp -o eratosthenes
+pthread: pthread_eratoshenes.cpp
+	g++ -g pthread_eratoshenes.cpp -o pthread_eratoshenes -lpthread -lrt
 check: check.cpp
 	g++ -g check.cpp -o check
 test: eratosthenes check
@@ -20,9 +22,5 @@ test: eratosthenes check
 
 clean:
 	rm -rf $(TARGET) *.o
-<<<<<<< HEAD
 	rm *.txt
 	rm -rf ./test/
-=======
-	rm -rf ./test/
->>>>>>> ff963ddbf8fbc39bd8872de54e93597497267fae
