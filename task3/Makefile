@@ -8,7 +8,7 @@ all: eratosthenes
 eratosthenes: eratosthenes.cpp
 	$(CMPL) eratosthenes.cpp -o eratosthenes
 pthread: pthread_eratoshenes.cpp
-	g++ -g pthread_eratoshenes.cpp -o pthread_eratoshenes -lpthread -lrt
+	g++ -g pthread_eratoshenes.cpp -o pthread_eratosthenes -lpthread -lrt
 check: check.cpp
 	g++ -g check.cpp -o check
 test: eratosthenes check
