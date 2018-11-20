@@ -15,3 +15,7 @@ C3=$(./compare $Cf ./test/C1_opt.dat)
 echo -e $C0" (0 and 0)\n"$C1" (0 and 1)\n"$C3" (0 and 2)\n" > $4
 echo -e "time:" $T0 $T1 $T3 "\n" >> $4
 #./print ./test/C0.dat > C.txt
+
+
+
+#git merge  

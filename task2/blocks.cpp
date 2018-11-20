@@ -40,12 +40,12 @@ uint64_t multiply_ijk(float ** A, float ** B, float ** C, uint64_t n, uint64_t m
                     uint64_t l, uint64_t size_of_block, fstream & f) {
     uint64_t time_mul = clock();
     for (uint64_t i = 0; i < n; i += size_of_block) 
-	for (uint64_t j = 0; j < m; j += size_of_block) 
-	    for (uint64_t k = 0; k < l; k += size_of_block)
-		for (uint64_t i1 = i; i1 < i + size_of_block && i1 < n; i1++)
+	    for (uint64_t j = 0; j < m; j += size_of_block) 
+	        for (uint64_t k = 0; k < l; k += size_of_block)
+		        for (uint64_t i1 = i; i1 < i + size_of_block && i1 < n; i1++)
                     for (uint64_t j1 = j; j1 < j + size_of_block && j1 < m; j1++)
-			for (uint64_t k1 = k; k1 < k + size_of_block && k1 < l; k1++)
-			    C[i1][j1] += A[i1][k1] * B[k1][j1];
+			            for (uint64_t k1 = k; k1 < k + size_of_block && k1 < l; k1++)
+			                C[i1][j1] += A[i1][k1] * B[k1][j1];
     return clock() - time_mul;						
 }
 uint64_t multiply_ikj(float ** A, float ** B, float ** C, uint64_t n, uint64_t m, 
@@ -53,11 +53,11 @@ uint64_t multiply_ikj(float ** A, float ** B, float ** C, uint64_t n, uint64_t m
     uint64_t time_mul = clock();
     for (uint64_t i = 0; i < n; i += size_of_block) 
         for (uint64_t k = 0; k < l; k += size_of_block) 
-	    for (uint64_t j = 0; j < m; j += size_of_block)
-		for (uint64_t i1 = i; i1 < i + size_of_block && i1 < n; i1++)
-	            for (uint64_t k1 = k; k1 < k + size_of_block && k1 < l; k1++)
-			for (uint64_t j1 = j; j1 < j + size_of_block && j1 < m; j1++)
-			    C[i1][j1] += A[i1][k1] * B[k1][j1];
+	        for (uint64_t j = 0; j < m; j += size_of_block)
+		        for (uint64_t i1 = i; i1 < i + size_of_block && i1 < n; i1++)
+	                for (uint64_t k1 = k; k1 < k + size_of_block && k1 < l; k1++)
+			            for (uint64_t j1 = j; j1 < j + size_of_block && j1 < m; j1++)
+			                C[i1][j1] += A[i1][k1] * B[k1][j1];
     return clock() - time_mul;						
 }
 double get_time(char * a, char * b, char * c, char mode, uint64_t size_of_block) {

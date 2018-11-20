@@ -58,6 +58,7 @@ void * Eratosthenes_Sieve(void * args) {
             fprintf(data->file_primes, "%d ", data->N + i + data->part * data->id);
         }
     }
+    delete[] NUMBERS;
     pthread_mutex_lock(&running_mutex);
     running_threads--;
     pthread_mutex_unlock(&running_mutex);
@@ -159,6 +160,10 @@ int main(int argc, char ** argv) {
     //cout << "Time: " << (clock() - t)/(CLOCKS_PER_SEC + 0.0) << endl;
     fclose(file_primes);
     fclose(file_time);
+    for (i = 0; i < n; i++) {
+        delete[] thread_args[i].PRIMES;
+    }
+    delete[] thread_args;
     Max_time(argv[5], n, argv[6]);
     pthread_exit(NULL);
 }
