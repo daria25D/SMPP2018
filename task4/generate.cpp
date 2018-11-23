@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
         return -1;
     }
     srand(time(NULL));
-    uint64_t n, m;
+    int n, m;
     try {
         n = strtoull(argv[1], NULL, 0);
         m = strtoull(argv[2], NULL, 0);
