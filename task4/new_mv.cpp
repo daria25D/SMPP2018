@@ -122,8 +122,8 @@ int main(int argc, char ** argv) {
         if (rank == MASTER) {
             c = init_vector(sizes[0]);
         }
-    time_one = MPI_Wtime() - time_one;
-    MPI_Reduce(part_c, c, sizes[0], MPI_DOUBLE, MPI_SUM, MASTER, MPI_COMM_WORLD);
+        time_one = MPI_Wtime() - time_one;
+        MPI_Reduce(part_c, c, sizes[0], MPI_DOUBLE, MPI_SUM, MASTER, MPI_COMM_WORLD);
         if (rank == MASTER) {
             MPI_File_open(MPI_COMM_SELF, argv[3], MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &f_c);
             MPI_File_write(f_c, &sizes[0], 1, MPI_INT, NULL);
