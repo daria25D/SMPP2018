@@ -134,22 +134,24 @@ int main(int argc, char ** argv) {
             MPI_File_close(&f_c);
         }   
     }
-    for (int i = 0; i < nproc; i++) {
-        if (rank == i) {
-            cout << time_one << endl;
-        }
-    }
+    const char * buf = new char[30];
+    string num = to_string(time_one) + "\n";
+    buf = num.c_str();
+    MPI_File f_time;
+    MPI_File_open(MPI_COMM_WORLD, "time.txt", MPI_MODE_WRONLY | MPI_MODE_CREATE, MPI_INFO_NULL, &f_time);
+    MPI_File_write_ordered(f_time, buf, strlen(buf), MPI_CHAR, NULL);
     MPI_Barrier(MPI_COMM_WORLD);
     MPI_Reduce(&time_one, &time_all, 1, MPI_DOUBLE, MPI_SUM, MASTER, MPI_COMM_WORLD);
     if (rank == MASTER) {
-        cout << time_all << endl;
+       cout << time_all << endl;
     }
     if (part_A) free(part_A);
     if (part_b) free(part_b);
     if (part_c) free(part_c);
     MPI_File_close(&f_A);
     MPI_File_close(&f_b);
+    MPI_File_close(&f_time);
     MPI_Finalize();
-    //fclose(f_time);
+    
     return 0;
 }
