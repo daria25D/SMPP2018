@@ -84,6 +84,7 @@ int main(int argc, char ** argv) {
                 part_c[i] += part_A[i * sizes[1] + j] * part_b[j];
             }
         }
+        time_one = MPI_Wtime() - time_one;
         MPI_File_open(MPI_COMM_WORLD, argv[3], MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &f_c);
         if (rank == MASTER) {
             MPI_File_write_shared(f_c, &sizes[0], 1, MPI_INT, NULL);
@@ -121,7 +122,8 @@ int main(int argc, char ** argv) {
         if (rank == MASTER) {
             c = init_vector(sizes[0]);
         }
-        MPI_Reduce(part_c, c, sizes[0], MPI_DOUBLE, MPI_SUM, MASTER, MPI_COMM_WORLD);
+    time_one = MPI_Wtime() - time_one;
+    MPI_Reduce(part_c, c, sizes[0], MPI_DOUBLE, MPI_SUM, MASTER, MPI_COMM_WORLD);
         if (rank == MASTER) {
             MPI_File_open(MPI_COMM_SELF, argv[3], MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &f_c);
             MPI_File_write(f_c, &sizes[0], 1, MPI_INT, NULL);
@@ -132,7 +134,6 @@ int main(int argc, char ** argv) {
             MPI_File_close(&f_c);
         }   
     }
-    time_one = MPI_Wtime() - time_one;
     for (int i = 0; i < nproc; i++) {
         if (rank == i) {
             cout << time_one << endl;
