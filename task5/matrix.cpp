@@ -16,7 +16,7 @@ void PMATMAT_3(int * sizes, double * A, double * B, double * C, int * grid_sizes
     int periods[3], remains[3];
     MPI_Comm comm_3D, comm_2D[3], comm_1D[3], pcomm;
     int i, j, k, blen[2];
-    MPI_Aint sizeofdouble, disp[2];
+    MPI_Aint disp[2];
     MPI_Comm_dup(comm, &pcomm);
     MPI_Bcast(sizes, 3, MPI_INT, 0, pcomm);
     MPI_Bcast(grid_sizes, 3, MPI_INT, 0, pcomm);
@@ -42,11 +42,10 @@ void PMATMAT_3(int * sizes, double * A, double * B, double * C, int * grid_sizes
     C_sub_matrix = (double *)malloc(sub_sizes[0] * sub_sizes[2] * sizeof(double));
     if (rank == 0) {
         MPI_Type_vector(sub_sizes[0], sub_sizes[1], sizes[1], MPI_DOUBLE, &types[0]);
-        MPI_Type_extent(MPI_DOUBLE, &sizeofdouble);
         blen[0] = 1;
         blen[1] = 1;
         disp[0] = 0;
-        disp[1] = sizeofdouble * sub_sizes[1];
+        disp[1] = sizeof(double) * sub_sizes[1];
         types[1] = MPI_UB;
         MPI_Type_create_struct(2, blen, disp, types, &type_a);
         MPI_Type_commit(&type_a);
@@ -58,7 +57,7 @@ void PMATMAT_3(int * sizes, double * A, double * B, double * C, int * grid_sizes
                 count_a[j * grid_sizes[1] + i] = 1;
             }
         MPI_Type_vector(sub_sizes[1], sub_sizes[2], sizes[2], MPI_DOUBLE, &types[0]);
-        disp[1] = sizeofdouble*sub_sizes[2];
+        disp[1] = sizeof(double) * sub_sizes[2];
         MPI_Type_create_struct(2, blen, disp, types, &type_b);
         MPI_Type_commit(&type_b);
         disp_b = (int *)malloc(grid_sizes[1] * grid_sizes[2] * sizeof(int));
@@ -69,7 +68,7 @@ void PMATMAT_3(int * sizes, double * A, double * B, double * C, int * grid_sizes
                 count_b[j * grid_sizes[2] + i] = 1;
             }
         MPI_Type_vector(sub_sizes[0], sub_sizes[2], sizes[2], MPI_DOUBLE, &types[0]);
-        disp[1] = sizeofdouble * sub_sizes[2];
+        disp[1] = sizeof(double) * sub_sizes[2];
         MPI_Type_create_struct(2, blen, disp, types, &type_c);
         MPI_Type_commit(&type_c);
         disp_c = (int *)malloc(grid_sizes[0] * grid_sizes[2] * sizeof(int));
