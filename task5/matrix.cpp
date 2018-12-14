@@ -53,7 +53,7 @@ void PMATMAT_3(int * sizes, double * A, double * B, double * C, int * grid_sizes
         count_a = (int *)malloc(grid_sizes[0] * grid_sizes[1] * sizeof(int));
         for (j = 0; j < grid_sizes[0]; j++)
             for (i = 0; i < grid_sizes[1]; i++) { 
-                disp_a[j * grid_sizes[1] + i] = (j * grid_sizes[1] * sub_sizes[0] + i);
+                disp_a[j * grid_sizes[1] + i] = j * grid_sizes[1] * sub_sizes[0] + i;
                 count_a[j * grid_sizes[1] + i] = 1;
             }
         MPI_Type_vector(sub_sizes[1], sub_sizes[2], sizes[2], MPI_DOUBLE, &types[0]);
@@ -64,7 +64,7 @@ void PMATMAT_3(int * sizes, double * A, double * B, double * C, int * grid_sizes
         count_b = (int *)malloc(grid_sizes[1] * grid_sizes[2] * sizeof(int));
         for (j = 0; j < grid_sizes[1]; j++)
             for (i = 0; i < grid_sizes[2]; i++) { 
-                disp_b[j * grid_sizes[2] + i] = (j * grid_sizes[2] * sub_sizes[1] + i);
+                disp_b[j * grid_sizes[2] + i] = j * grid_sizes[2] * sub_sizes[1] + i;
                 count_b[j * grid_sizes[2] + i] = 1;
             }
         MPI_Type_vector(sub_sizes[0], sub_sizes[2], sizes[2], MPI_DOUBLE, &types[0]);
@@ -75,7 +75,7 @@ void PMATMAT_3(int * sizes, double * A, double * B, double * C, int * grid_sizes
         count_c = (int *)malloc(grid_sizes[0] * grid_sizes[2] * sizeof(int));
         for (j = 0; j < grid_sizes[0]; j++)
             for (i = 0; i < grid_sizes[2]; i++) { 
-                disp_c[j * grid_sizes[2] + i] = (j * grid_sizes[2] * sub_sizes[0] + i);
+                disp_c[j * grid_sizes[2] + i] = j * grid_sizes[2] * sub_sizes[0] + i;
                 count_c[j * grid_sizes[2] + i] = 1;
             }   
     } 
