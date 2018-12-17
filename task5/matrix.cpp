@@ -32,7 +32,7 @@ void PMATMAT_3(int * sizes, double * A, double * B, double * C, int * grid_sizes
     }
     for (i = 0; i < 3; i++) { 
         for (j = 0; j < 3; j++)
-            remains[j] = (i == j);
+            remains[j] = (i == j);  
         MPI_Cart_sub(comm_3D, remains, &comm_1D[i]);
     }
     for (i = 0; i < 3; i++)
