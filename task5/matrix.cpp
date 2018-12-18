@@ -6,7 +6,7 @@
 #include <sys/time.h>
 #define NUM_DIMS 3
 using namespace std;
-void PMATMAT_3(int * sizes, double * A, double * B, double * C, int * grid_sizes, MPI_Comm comm) {
+void DNS_3D(int * sizes, double * A, double * B, double * C, int * grid_sizes, MPI_Comm comm) {
     double * A_sub_matrix, * B_sub_matrix, * C_sub_matrix, * C_reduced;   
     int coords[3];  
     int sub_sizes[3];           
@@ -40,6 +40,27 @@ void PMATMAT_3(int * sizes, double * A, double * B, double * C, int * grid_sizes
     A_sub_matrix = (double *)malloc(sub_sizes[0] * sub_sizes[1] * sizeof(double));
     B_sub_matrix = (double *)malloc(sub_sizes[1] * sub_sizes[2] * sizeof(double));
     C_sub_matrix = (double *)malloc(sub_sizes[0] * sub_sizes[2] * sizeof(double));
+    disp_a = (int *)malloc(grid_sizes[0] * grid_sizes[1] * sizeof(int));
+    count_a = (int *)malloc(grid_sizes[0] * grid_sizes[1] * sizeof(int));
+    for (j = 0; j < grid_sizes[0]; j++)
+        for (i = 0; i < grid_sizes[1]; i++) { 
+            disp_a[j * grid_sizes[1] + i] = j * grid_sizes[1] * sub_sizes[0] + i;
+            count_a[j * grid_sizes[1] + i] = 1;
+        }
+    disp_b = (int *)malloc(grid_sizes[1] * grid_sizes[2] * sizeof(int));
+    count_b = (int *)malloc(grid_sizes[1] * grid_sizes[2] * sizeof(int));
+    for (j = 0; j < grid_sizes[1]; j++)
+        for (i = 0; i < grid_sizes[2]; i++) { 
+            disp_b[j * grid_sizes[2] + i] = j * grid_sizes[2] * sub_sizes[1] + i;
+            count_b[j * grid_sizes[2] + i] = 1;
+        }
+    disp_c = (int *)malloc(grid_sizes[0] * grid_sizes[2] * sizeof(int));
+    count_c = (int *)malloc(grid_sizes[0] * grid_sizes[2] * sizeof(int));
+    for (j = 0; j < grid_sizes[0]; j++)
+        for (i = 0; i < grid_sizes[2]; i++) { 
+            disp_c[j * grid_sizes[2] + i] = j * grid_sizes[2] * sub_sizes[0] + i;
+            count_c[j * grid_sizes[2] + i] = 1;
+        }  
     if (rank == 0) {
         MPI_Type_vector(sub_sizes[0], sub_sizes[1], sizes[1], MPI_DOUBLE, &types[0]);
         blen[0] = 1;
@@ -49,45 +70,26 @@ void PMATMAT_3(int * sizes, double * A, double * B, double * C, int * grid_sizes
         types[1] = MPI_UB;
         MPI_Type_create_struct(2, blen, disp, types, &type_a);
         MPI_Type_commit(&type_a);
-        disp_a = (int *)malloc(grid_sizes[0] * grid_sizes[1] * sizeof(int));
-        count_a = (int *)malloc(grid_sizes[0] * grid_sizes[1] * sizeof(int));
-        for (j = 0; j < grid_sizes[0]; j++)
-            for (i = 0; i < grid_sizes[1]; i++) { 
-                disp_a[j * grid_sizes[1] + i] = j * grid_sizes[1] * sub_sizes[0] + i;
-                count_a[j * grid_sizes[1] + i] = 1;
-            }
         MPI_Type_vector(sub_sizes[1], sub_sizes[2], sizes[2], MPI_DOUBLE, &types[0]);
         disp[1] = sizeof(double) * sub_sizes[2];
         MPI_Type_create_struct(2, blen, disp, types, &type_b);
         MPI_Type_commit(&type_b);
-        disp_b = (int *)malloc(grid_sizes[1] * grid_sizes[2] * sizeof(int));
-        count_b = (int *)malloc(grid_sizes[1] * grid_sizes[2] * sizeof(int));
-        for (j = 0; j < grid_sizes[1]; j++)
-            for (i = 0; i < grid_sizes[2]; i++) { 
-                disp_b[j * grid_sizes[2] + i] = j * grid_sizes[2] * sub_sizes[1] + i;
-                count_b[j * grid_sizes[2] + i] = 1;
-            }
         MPI_Type_vector(sub_sizes[0], sub_sizes[2], sizes[2], MPI_DOUBLE, &types[0]);
         disp[1] = sizeof(double) * sub_sizes[2];
         MPI_Type_create_struct(2, blen, disp, types, &type_c);
-        MPI_Type_commit(&type_c);
-        disp_c = (int *)malloc(grid_sizes[0] * grid_sizes[2] * sizeof(int));
-        count_c = (int *)malloc(grid_sizes[0] * grid_sizes[2] * sizeof(int));
-        for (j = 0; j < grid_sizes[0]; j++)
-            for (i = 0; i < grid_sizes[2]; i++) { 
-                disp_c[j * grid_sizes[2] + i] = j * grid_sizes[2] * sub_sizes[0] + i;
-                count_c[j * grid_sizes[2] + i] = 1;
-            }   
+        MPI_Type_commit(&type_c); 
     } 
     if (coords[2] == 0)
-    MPI_Scatterv(A, count_a, disp_a, type_a, A_sub_matrix, sub_sizes[0] * sub_sizes[1], MPI_DOUBLE, 0, comm_2D[2]);
+        MPI_Scatterv(A, count_a, disp_a, type_a, A_sub_matrix, sub_sizes[0] * sub_sizes[1], MPI_DOUBLE, 0, comm_2D[2]);
     if (coords[0] == 0)
-    MPI_Scatterv(B, count_b, disp_b, type_b, B_sub_matrix, sub_sizes[1] * sub_sizes[2], MPI_DOUBLE, 0, comm_2D[0]);
+            MPI_Scatterv(B, count_b, disp_b, type_b, B_sub_matrix, sub_sizes[1] * sub_sizes[2], MPI_DOUBLE, 0, comm_2D[0]);
     MPI_Bcast(A_sub_matrix, sub_sizes[0] * sub_sizes[1], MPI_DOUBLE, 0, comm_1D[2]);
     MPI_Bcast(B_sub_matrix, sub_sizes[1] * sub_sizes[2], MPI_DOUBLE, 0, comm_1D[0]);
+    for (i = 0; i < sub_sizes[0]; i++) 
+        for (j = 0; j < sub_sizes[2]; j++)
+            C_sub_matrix[sub_sizes[2] * i + j] = 0.0;
     for (i = 0; i < sub_sizes[0]; i++)
         for (k = 0; k < sub_sizes[1]; k++) { 
-            C_sub_matrix[sub_sizes[2] * i + k] = 0;
             for (j = 0; j < sub_sizes[2]; j++)
                 C_sub_matrix[sub_sizes[2] * i + j] += + A_sub_matrix[sub_sizes[1] * i + k] * B_sub_matrix[sub_sizes[2] * k + j];
         }
@@ -165,7 +167,7 @@ int main(int argc, char **argv) {
         MPI_File_close(&f_B);
     } 
     time_one = MPI_Wtime();
-    PMATMAT_3(sizes, A, B, C, grid_sizes, comm);
+    DNS_3D(sizes, A, B, C, grid_sizes, comm);
     time_one = MPI_Wtime() - time_one;
     printf("%lf\n", time_one);
     if(rank == 0) { 
